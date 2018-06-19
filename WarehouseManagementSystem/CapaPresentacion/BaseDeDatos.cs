@@ -12,12 +12,12 @@ using CapaBusiness;
 
 namespace CapaPresentacion
 {
-    public partial class Form1 : Form
+    public partial class BaseDeDatos : Form
     {
         CN_Productos objetoCN = new CN_Productos();
         private string idProducto = null;
         private bool Editar = false;
-        public Form1()
+        public BaseDeDatos()
         {
             InitializeComponent();
         }
@@ -63,7 +63,7 @@ namespace CapaPresentacion
             {
                 try
                 {
-                    objetoCN.InsertarProducto(txtNombre.Text, txtDesc.Text, txtMarca.Text, txtPrecio.Text, txtStock.Text);
+                    objetoCN.InsertarProducto(txtClave.Text, txtDesc.Text, txtMarca.Text, txtPrecio.Text, txtStock.Text);
                     MessageBox.Show("Se inserto Correctamente");
                     MostrarProductos();
                     limpiarForm();
@@ -78,7 +78,7 @@ namespace CapaPresentacion
             {
                 try
                 {
-                    objetoCN.EditarProducto(txtNombre.Text, txtDesc.Text, txtMarca.Text, txtPrecio.Text, txtStock.Text, idProducto);
+                    objetoCN.EditarProducto(txtClave.Text, txtDesc.Text, txtMarca.Text, txtPrecio.Text, txtStock.Text, idProducto);
                     MessageBox.Show("Se edito Correctamente");
                     MostrarProductos();
                     limpiarForm();
@@ -99,12 +99,12 @@ namespace CapaPresentacion
             {
                 Editar = true;
                 //escrito["Nombre"] como en la base de datos
-                txtNombre.Text = dataGridView1.CurrentRow.Cells["Nombre"].Value.ToString();
+                txtClave.Text = dataGridView1.CurrentRow.Cells["Nombre"].Value.ToString();
                 txtMarca.Text = dataGridView1.CurrentRow.Cells["Marca"].Value.ToString();
                 txtDesc.Text = dataGridView1.CurrentRow.Cells["Descripcion"].Value.ToString();
                 txtPrecio.Text = dataGridView1.CurrentRow.Cells["Precio"].Value.ToString();
                 txtStock.Text = dataGridView1.CurrentRow.Cells["Stock"].Value.ToString();
-                txtNombre.Text = dataGridView1.CurrentRow.Cells["Nombre"].Value.ToString();
+                txtClave.Text = dataGridView1.CurrentRow.Cells["Nombre"].Value.ToString();
                 idProducto = dataGridView1.CurrentRow.Cells["Id"].Value.ToString();
             }
             else
@@ -118,7 +118,7 @@ namespace CapaPresentacion
             txtMarca.Text = "";
             txtPrecio.Clear();
             txtStock.Clear();
-            txtNombre.Clear();
+            txtClave.Clear();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -134,6 +134,28 @@ namespace CapaPresentacion
             {
                 MessageBox.Show("seleccionar una fila por favor");
             }
+        }
+
+        private void btnBusqueda_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(txtDescBusqueda.Text);
+            try
+            {
+                
+                dataGridView1.DataSource = objetoCN.Buscar(txtDescBusqueda.Text);
+                MessageBox.Show("Se busco Correctamente");
+                //MostrarProductos();
+                //limpiarForm();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se buscar por:" + ex);
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

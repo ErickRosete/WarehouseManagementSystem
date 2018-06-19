@@ -30,5 +30,13 @@ namespace CapaBusiness
         {
             objetoCD.Eliminar(Convert.ToInt32(id));
         }
+ 
+        public DataTable Buscar(string desc)
+        {
+            CD_Productos objetoCD = new CD_Productos();
+            DataTable tabla = new DataTable();
+            tabla = objetoCD.Buscar(desc);
+            return tabla;
+        }
     }
 }

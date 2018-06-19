@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using MySql.Data.MySqlClient;
+using System.Windows.Forms;
 
 namespace Capa_Data
 {
+  
     public class CD_Productos
     {
         private CD_conexion conexion = new CD_conexion();
@@ -23,6 +25,29 @@ namespace Capa_Data
             //por procedimiento estructurado
             comando.CommandText = "MostrarProductos";
             comando.CommandType = CommandType.StoredProcedure;
+            leer = comando.ExecuteReader();
+            tabla.Load(leer);
+            conexion.CerrarConexion();
+            return tabla;
+        }
+        public DataTable Buscar(string desc)
+        {
+            comando.Connection = conexion.AbrirConexion();
+            //transact SQL
+            //comando.CommandText = "Select * from Productos";
+            //por procedimiento estructurado
+            string cadenaCaracteres = null;
+            cadenaCaracteres = "\"%" + desc + "%\"";
+
+            MessageBox.Show(cadenaCaracteres);
+            //transact SQL
+            string cadenaSql = "Select * from Productos WHERE descripcion like " + cadenaCaracteres + ";";
+            MessageBox.Show(cadenaSql);
+            comando.CommandText =cadenaSql;
+            comando.CommandType = CommandType.Text;
+            //comando.CommandText = "BuscarDescripcionProductos";
+            //comando.CommandType = CommandType.StoredProcedure;
+            //comando.Parameters.AddWithValue("_descripcion", cadenaCaracteres);
             leer = comando.ExecuteReader();
             tabla.Load(leer);
             conexion.CerrarConexion();
