@@ -30,7 +30,7 @@ namespace Capa_Data
             conexion.CerrarConexion();
             return tabla;
         }
-        public DataTable Buscar(string desc)
+        public DataTable Buscar(string desc,string columna)
         {
             comando.Connection = conexion.AbrirConexion();
             //transact SQL
@@ -41,7 +41,7 @@ namespace Capa_Data
 
             MessageBox.Show(cadenaCaracteres);
             //transact SQL
-            string cadenaSql = "Select * from Productos WHERE descripcion like " + cadenaCaracteres + ";";
+            string cadenaSql = "Select * from Productos WHERE "+columna+" like " + cadenaCaracteres + ";";
             MessageBox.Show(cadenaSql);
             comando.CommandText =cadenaSql;
             comando.CommandType = CommandType.Text;
@@ -53,8 +53,40 @@ namespace Capa_Data
             conexion.CerrarConexion();
             return tabla;
         }
-        public void Insertar(string nombre,string desc,string marca, double precio, int stock)
+        public DataTable Buscar2(string desc, string columna)
         {
+            comando.Connection = conexion.AbrirConexion();
+            //transact SQL
+            //comando.CommandText = "Select * from Productos";
+            //por procedimiento estructurado
+            string cadenaCaracteres = null;
+            cadenaCaracteres = '"'+ desc + '"';
+
+            MessageBox.Show(cadenaCaracteres);
+            //transact SQL
+            string cadenaSql = "Select Clave,Descripcion,Precio_Venta from Productos WHERE " + columna + "=" + cadenaCaracteres + ";";
+            MessageBox.Show(cadenaSql);
+            comando.CommandText = cadenaSql;
+            comando.CommandType = CommandType.Text;
+            //comando.CommandText = "BuscarDescripcionProductos";
+            //comando.CommandType = CommandType.StoredProcedure;
+            //comando.Parameters.AddWithValue("_descripcion", cadenaCaracteres);
+            leer = comando.ExecuteReader();
+            tabla.Load(leer);
+            conexion.CerrarConexion();
+            return tabla;
+        }
+
+        public void Insertar(string clave,string desc, string unidad, string marca, double precioc,double preciov, int cantidad,string local)
+        {
+            //miforma.Clave = "";
+            //miforma.Descripcion = "";
+            //miforma.Unidad = "";
+            //miforma.Marca = "";
+            //miforma.PC = "";
+            //miforma.PV = "";
+            //miforma.Cantidad = "";
+            //miforma.Localizacion = "";
             MySqlCommand comando = new MySqlCommand();
             comando.Connection = conexion.AbrirConexion();
             //transact SQL
@@ -66,30 +98,35 @@ namespace Capa_Data
             //por procedimiento estructurado
             comando.CommandText = "InsertarProductos";
             comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.AddWithValue("_nombre", nombre);
+            comando.Parameters.AddWithValue("_clave", clave);
             comando.Parameters.AddWithValue("_descripcion", desc);
+            comando.Parameters.AddWithValue("_unidad", unidad);
             comando.Parameters.AddWithValue("_marca", marca);
-            comando.Parameters.AddWithValue("_precio", precio);
-            comando.Parameters.AddWithValue("_stock", stock);
+            comando.Parameters.AddWithValue("_precioc", precioc);
+            comando.Parameters.AddWithValue("_preciov", preciov);
+            comando.Parameters.AddWithValue("_cantidad", cantidad);
+            comando.Parameters.AddWithValue("_localizacion", local);
 
             comando.ExecuteNonQuery();
             comando.Parameters.Clear();
 
 
         }
-        public void Editar(string nombre, string desc, string marca, double precio, int stock,int id)
+        public void Editar(string clave, string desc, string unidad, string marca, double precioc, double preciov, int cantidad, string local)
         {
             //por procedimiento estructurado
             comando.Connection = conexion.AbrirConexion();
 
             comando.CommandText = "EditarProductos";
             comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.AddWithValue("_nombre", nombre);
+            comando.Parameters.AddWithValue("_clave", clave);
             comando.Parameters.AddWithValue("_descripcion", desc);
+            comando.Parameters.AddWithValue("_unidad", unidad);
             comando.Parameters.AddWithValue("_marca", marca);
-            comando.Parameters.AddWithValue("_precio", precio);
-            comando.Parameters.AddWithValue("_stock", stock);
-            comando.Parameters.AddWithValue("_id", id);
+            comando.Parameters.AddWithValue("_precioc", precioc);
+            comando.Parameters.AddWithValue("_preciov", preciov);
+            comando.Parameters.AddWithValue("_cantidad", cantidad);
+            comando.Parameters.AddWithValue("_localizacion", local);
 
             comando.ExecuteNonQuery();
             comando.Parameters.Clear();
@@ -104,12 +141,12 @@ namespace Capa_Data
         //foreach(DataRow in tabla.Rows){
         //{Console.WriteLine(row["customerName"].ToString());
         //}
-        public void Eliminar(int id)
+        public void Eliminar(string clave)
         {
             comando.Connection = conexion.AbrirConexion();
             comando.CommandText = "EliminarProducto";
             comando.CommandType = CommandType.StoredProcedure;
-            comando.Parameters.AddWithValue("_id", id);
+            comando.Parameters.AddWithValue("_clave", clave);
 
             comando.ExecuteNonQuery();
             comando.Parameters.Clear();

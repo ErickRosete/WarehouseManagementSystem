@@ -19,23 +19,38 @@ namespace CapaBusiness
             tabla = objetoCD.Mostrar();
             return tabla;
         }
-        public void InsertarProducto(string nombre, string desc, string marca, string precio, string stock){
-            objetoCD.Insertar(nombre, desc, marca, Convert.ToDouble(precio), Convert.ToInt32(stock));
+        public void InsertarProducto(string[] arreglo){
+            //miforma.Clave = "";
+            //miforma.Descripcion = "";
+            //miforma.Unidad = "";
+            //miforma.Marca = "";
+            //miforma.PC = "";
+            //miforma.PV = "";
+            //miforma.Cantidad = "";
+            //miforma.Localizacion = "";
+            objetoCD.Insertar(arreglo[0], arreglo[1], arreglo[2], arreglo[3],Convert.ToDouble(arreglo[4]), Convert.ToDouble(arreglo[5]),Convert.ToInt32(arreglo[6]),arreglo[7]);
         }
-        public void EditarProducto(string nombre, string desc, string marca, string precio, string stock,string id)
+        public void EditarProducto(string[] arreglo)
         {
-            objetoCD.Editar(nombre, desc, marca, Convert.ToDouble(precio), Convert.ToInt32(stock),Convert.ToInt32(id));
+            objetoCD.Editar(arreglo[0], arreglo[1], arreglo[2], arreglo[3], Convert.ToDouble(arreglo[4]), Convert.ToDouble(arreglo[5]), Convert.ToInt32(arreglo[6]), arreglo[7]);
         }
-        public void EliminarProducto(string id)
+        public void EliminarProducto(string clave)
         {
-            objetoCD.Eliminar(Convert.ToInt32(id));
+            objetoCD.Eliminar(clave);
         }
  
-        public DataTable Buscar(string desc)
+        public DataTable Buscar(string desc,string columna)
         {
             CD_Productos objetoCD = new CD_Productos();
             DataTable tabla = new DataTable();
-            tabla = objetoCD.Buscar(desc);
+            tabla = objetoCD.Buscar(desc,columna);
+            return tabla;
+        }
+        public DataTable Buscar2(string desc, string columna)
+        {
+            CD_Productos objetoCD = new CD_Productos();
+            DataTable tabla = new DataTable();
+            tabla = objetoCD.Buscar2(desc, columna);
             return tabla;
         }
     }
